@@ -1,14 +1,24 @@
-import PropTypes from 'prop-types';
+import { setFilter } from '../../redux/filter/filter-slice';
+import { getFilter } from '../../redux/filter/filter-selectors';
+import { useSelector, useDispatch } from 'react-redux';
 
 import styles from '../App.module.css';
 
-const PhoneBookFilter = ({ handleChange, value }) => {
+const PhoneBookFilter = () => {
+  const dispatch = useDispatch();
+
+  const handleFilter = ({ target }) => {
+    dispatch(setFilter(target.value));
+  };
+
+  const filter = useSelector(getFilter);
+
   return (
     <div className={styles.formGroup}>
       <label htmlFor="">Find contacts by name</label>
       <input
-        onChange={handleChange}
-        value={value}
+        onChange={handleFilter}
+        value={filter}
         type="text"
         name="filter"
         pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -20,7 +30,3 @@ const PhoneBookFilter = ({ handleChange, value }) => {
 };
 
 export default PhoneBookFilter;
-
-PhoneBookFilter.propTypes = {
-  handleChange: PropTypes.func.isRequired,
-};

@@ -1,12 +1,13 @@
+import { addContact } from '../../redux/contacts/contacts-slise';
 import { useState } from 'react';
-
-import PropTypes from 'prop-types';
+import { getAllContacts } from 'redux/contacts/contacts-selectors';
+import { useSelector, useDispatch } from 'react-redux';
 
 import initialStateForm from '../initialStateForm';
 
 import styles from '../App.module.css';
 
-const PhoneBookForm = ({ onSubmit, isDuplicate }) => {
+const PhoneBookForm = () => {
   const [state, setState] = useState({ ...initialStateForm });
 
   const handleChange = ({ target }) => {
@@ -16,10 +17,30 @@ const PhoneBookForm = ({ onSubmit, isDuplicate }) => {
     });
   };
 
+  const dispatch = useDispatch();
+  const contacts = useSelector(getAllContacts);
+
+  const isDuplicate = name => {
+    const normalizeName = name.toLowerCase();
+    const contact = contacts.find(({ name }) => {
+      return name.toLowerCase() === normalizeName;
+    });
+    return Boolean(contact);
+  };
+
+  const handleAddContact = ({ name, number }) => {
+    if (isDuplicate(name)) {
+      alert(`${name} is already in contacts`);
+      return false;
+    }
+
+    dispatch(addContact({ name, number }));
+  };
+
   const handleSubmit = e => {
     e.preventDefault();
     const { name } = state;
-    onSubmit({ name, number });
+    handleAddContact({ name, number });
     if (!isDuplicate(name)) {
       setState({ ...initialStateForm });
     }
@@ -60,8 +81,3 @@ const PhoneBookForm = ({ onSubmit, isDuplicate }) => {
 };
 
 export default PhoneBookForm;
-
-PhoneBookForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  isDuplicate: PropTypes.func.isRequired,
-};
