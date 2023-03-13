@@ -8,7 +8,6 @@ import styles from '../App.module.css';
 const ContactItem = ({ contact }) => {
   const { id, name, number } = contact;
   const dispatch = useDispatch();
-  console.log('id', id, 'name', name, 'number', number);
   const handleDeleteContact = id => {
     dispatch(deleteContact(id));
   };

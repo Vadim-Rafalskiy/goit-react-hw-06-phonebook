@@ -8,8 +8,6 @@ import ContactItem from 'components/ContactItem/ContactItem';
 const ContactList = () => {
   const contacts = useSelector(getFilteredContacts);
 
-  console.log('contacts', contacts);
-
   const elements = contacts.map(contact => (
     <ContactItem key={nanoid()} contact={contact} />
   ));
